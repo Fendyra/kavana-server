@@ -17,7 +17,7 @@ try {
         $responseBody = array(
             "message" => "Email already registered",
         );
-        sendResponse(401, $responseBody);
+        sendResponse(400, $responseBody);
         return;
     }
 

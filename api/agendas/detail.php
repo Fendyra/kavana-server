@@ -1,37 +1,38 @@
 <?php
 
-require '../connection.php';
-require 'response.php';
+require '../../connection.php';
+require '../response.php';
 
-$email = $_POST['email'];
-$password = md5($_POST['password']);
+$id = $_GET['id'];
 
 try {
-    $sql = "SELECT *, '' AS password FROM users
+    $sql = "SELECT 
+            * FROM agendas
             WHERE
-            email = '$email' AND password = '$password'
+            id = '$id'
             ";
     $statement = $conn->prepare($sql);
     $statement->execute();
     $result = $statement->fetch(PDO::FETCH_ASSOC);
+    
     if (!$result) {
         $responseBody = array(
-            "message" => "Login Failed",
+            "message" => "Not Found",
         );
-        sendResponse(401, $responseBody);
+        sendResponse(404, $responseBody);
         return;
     }
 
     $responseBody = array(
-        "message" => "Login Success",
+        "message" => "Success Fetch Data",
         "data" => array(
-            "user" => $result,
+            "agendas" => $result,
         ),
     );
     sendResponse(200, $responseBody);
 } catch (PDOException $e) {
     $responseBody = array(
-        "message" => "Login Failed",
+        "message" => "Something went wrong",
         "error" => $e->getMessage(),
     );
     sendResponse(500, $responseBody);
