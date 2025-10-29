@@ -6,15 +6,10 @@ require '../response.php';
 $id = $_GET['id'];
 
 try {
-    $sql = "SELECT 
-            * FROM agendas
-            WHERE
-            id = '$id'
-            ";
+    $sql = "SELECT * FROM agendas WHERE id = '$id'";
     $statement = $conn->prepare($sql);
     $statement->execute();
     $result = $statement->fetch(PDO::FETCH_ASSOC);
-    
     if (!$result) {
         $responseBody = array(
             "message" => "Not Found",
@@ -24,9 +19,9 @@ try {
     }
 
     $responseBody = array(
-        "message" => "Success Fetch Data",
+        "message" => "Found",
         "data" => array(
-            "agendas" => $result,
+            "agenda" => $result,
         ),
     );
     sendResponse(200, $responseBody);
