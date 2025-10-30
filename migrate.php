@@ -19,6 +19,8 @@ try {
     migrateMoods($conn);
     migrateSolutions($conn);
     migrateAgendas($conn);
+    migrateSavings($conn);
+
 
     $conn = null;
     echo "\nMigration process completed successfully.\n";
@@ -154,5 +156,23 @@ function migrateAgendas($conn)
         echo " Error modifying table 'agendas': " . $e->getMessage();
     }
     echo "\n";
+}
+
+
+function migrateSavings($conn) {
+    try {
+        $sql = "CREATE TABLE IF NOT EXISTS `savings` (
+                `id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                `user_id` INT(11) UNSIGNED NOT NULL,
+                `amount` DECIMAL(15, 2) NOT NULL,
+                `note` TEXT NULL,
+                `created_at` DATETIME NOT NULL,
+                FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+        $conn->exec($sql);
+        echo "Table 'savings' ensured successfully.\n";
+    } catch (PDOException $e) {
+        echo "Error ensuring table 'savings': " . $e->getMessage() . "\n";
+    }
 }
 ?>
